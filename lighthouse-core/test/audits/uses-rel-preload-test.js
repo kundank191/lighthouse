@@ -11,6 +11,7 @@
 const UsesRelPreload = require('../../audits/uses-rel-preload.js');
 const assert = require('assert');
 const defaultMainResource = {
+  url: 'http://www.example.com',
   _endTime: 1,
 };
 
@@ -37,16 +38,24 @@ describe('Performance: uses-rel-preload audit', () => {
     const networkRecords = [
       {
         requestId: '2',
-        _endTime: 1,
-        _isLinkPreload: false,
-        _url: 'http://www.example.com',
-      },
-      {
-        requestId: '3',
         _startTime: 10,
         _endTime: 19,
         _isLinkPreload: false,
-        _url: 'http://www.example.com/script.js',
+        url: 'http://www.example.com/script.js',
+      },
+      {
+        requestId: '3',
+        _startTime: 7,
+        _endTime: 17,
+        _isLinkPreload: false,
+        url: 'http://sub.example.com/secondary_script.js',
+      },
+      {
+        requestId: '4',
+        _startTime: 7,
+        _endTime: 17,
+        _isLinkPreload: false,
+        url: 'http://otherdomain.com/terniary_script.js',
       },
     ];
     const chains = {
@@ -55,10 +64,17 @@ describe('Performance: uses-rel-preload audit', () => {
           '2': {
             children: {
               '3': {
-                request: networkRecords[0],
                 children: {
                   '4': {
+                    request: networkRecords[0],
+                    children: {},
+                  },
+                  '5': {
                     request: networkRecords[1],
+                    children: {},
+                  },
+                  '6': {
+                    request: networkRecords[2],
                     children: {},
                   },
                 },
@@ -72,7 +88,7 @@ describe('Performance: uses-rel-preload audit', () => {
     return UsesRelPreload.audit(mockArtifacts(networkRecords, chains, mainResource))
       .then(output => {
         assert.equal(output.rawValue, 9000);
-        assert.equal(output.details.items.length, 1);
+        assert.equal(output.details.items.length, 2);
       });
   });
 
@@ -82,7 +98,7 @@ describe('Performance: uses-rel-preload audit', () => {
         requestId: '3',
         _startTime: 10,
         _isLinkPreload: true,
-        _url: 'http://www.example.com/script.js',
+        url: 'http://www.example.com/script.js',
       },
     ];
     const chains = {

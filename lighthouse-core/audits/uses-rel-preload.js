@@ -7,7 +7,8 @@
 'use strict';
 
 const Audit = require('./audit');
-const Util = require('../report/html/renderer/util');
+const Util = require('../report/v2/renderer/util');
+const URL = require('../lib/url-shim');
 const UnusedBytes = require('./byte-efficiency/byte-efficiency-audit');
 const THRESHOLD_IN_MS = 100;
 
@@ -51,8 +52,22 @@ class UsesRelPreloadAudit extends Audit {
   }
 
   /**
-   * @param {!Artifacts} artifacts
-   * @return {!AuditResult}
+   *
+   * @param {LH.WebInspector.NetworkRequest} request
+   * @param {LH.WebInspector.NetworkRequest} mainResource
+   * @return {boolean}
+   */
+  static shouldPreload(request, mainResource) {
+    if (request._isLinkPreload || request.protocol === 'data') {
+      return false;
+    }
+
+    return URL.rootDomainsMatch(request.url, mainResource.url);
+  }
+
+  /**
+   * @param {LH.Artifacts} artifacts
+   * @return {LH.Audit.Product}
    */
   static audit(artifacts) {
     const devtoolsLog = artifacts.devtoolsLogs[UsesRelPreloadAudit.DEFAULT_PASS];
@@ -64,14 +79,13 @@ class UsesRelPreloadAudit extends Audit {
     ]).then(([critChains, mainResource]) => {
       const results = [];
       let maxWasted = 0;
-      // get all critical requests 2 + mainResourceIndex levels deep
+      // get all critical requests 2 levels deep (starting from mainResource index)
       const mainResourceIndex = mainResource.redirects ? mainResource.redirects.length : 0;
 
       const criticalRequests = UsesRelPreloadAudit._flattenRequests(critChains,
         3 + mainResourceIndex, 2 + mainResourceIndex);
       criticalRequests.forEach(request => {
-        const networkRecord = request;
-        if (!networkRecord._isLinkPreload && networkRecord.protocol !== 'data') {
+        if (UsesRelPreloadAudit.shouldPreload(request, mainResource)) {
           // calculate time between mainresource.endTime and resource start time
           const wastedMs = Math.min(request._startTime - mainResource._endTime,
             request._endTime - request._startTime) * 1000;

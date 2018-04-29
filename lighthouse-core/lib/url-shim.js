@@ -88,6 +88,26 @@ class URLShim extends URL {
   }
 
   /**
+   * Check if rootDomains matches
+   *
+   * @param {string} urlA
+   * @param {string} urlB
+   */
+  static rootDomainsMatch(urlA, urlB) {
+    const urlAInfo = new URL(urlA);
+    const urlBInfo = new URL(urlB);
+
+    if (!urlAInfo.host || !urlBInfo.host) {
+      return false;
+    }
+
+    const urlARootDomain = urlAInfo.host.split('.').slice(-2).join('.');
+    const urlBRootDomain = urlBInfo.host.split('.').slice(-2).join('.');
+
+    return urlARootDomain === urlBRootDomain;
+  }
+
+  /**
    * @param {string} url
    * @param {{numPathParts: number, preserveQuery: boolean, preserveHost: boolean}=} options
    * @return {string}
