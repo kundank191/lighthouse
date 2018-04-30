@@ -11,7 +11,7 @@
 const UsesRelPreload = require('../../audits/uses-rel-preload.js');
 const assert = require('assert');
 const defaultMainResource = {
-  url: 'http://www.example.com',
+  url: 'http://www.example.com:3000',
   _endTime: 1,
 };
 

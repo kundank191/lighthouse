@@ -97,12 +97,12 @@ class URLShim extends URL {
     const urlAInfo = new URL(urlA);
     const urlBInfo = new URL(urlB);
 
-    if (!urlAInfo.host || !urlBInfo.host) {
+    if (!urlAInfo.hostname || !urlBInfo.hostname) {
       return false;
     }
 
-    const urlARootDomain = urlAInfo.host.split('.').slice(-2).join('.');
-    const urlBRootDomain = urlBInfo.host.split('.').slice(-2).join('.');
+    const urlARootDomain = urlAInfo.hostname.split('.').slice(-2).join('.');
+    const urlBRootDomain = urlBInfo.hostname.split('.').slice(-2).join('.');
 
     return urlARootDomain === urlBRootDomain;
   }
