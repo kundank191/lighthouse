@@ -53,13 +53,15 @@
   --lh-audit-score-width: calc(5 * var(--body-font-size));
   --lh-category-score-width: calc(5 * var(--body-font-size));
   --lh-audit-vpadding: 8px;
+  --lh-audit-index-width: 1.3em;
   --lh-audit-hgap: 12px;
   --lh-audit-group-vpadding: 12px;
   --lh-section-vpadding: 12px;
   --pass-icon-url: url('data:image/svg+xml;utf8,<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><path stroke="hsl(139, 70%, 30%)" stroke-width="1.5" d="M1 5.75l3.5 3.5 6.5-6.5" fill="none" fill-rule="evenodd"/></svg>');
   --fail-icon-url: url('data:image/svg+xml;utf8,<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><g stroke="hsl(1, 73%, 45%)" stroke-width="1.5" fill="none" fill-rule="evenodd"><path d="M2 10l8-8M10 10L2 2"/></g></svg>');
-  --collapsed-icon-url: url('data:image/svg+xml;utf8,<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path fill="none" d="M0 0h12v12H0z"/><path fill="hsl(0, 0%, 60%)" d="M3 2l6 4-6 4z"/></g></svg>');
-  --expanded-icon-url: url('data:image/svg+xml;utf8,<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path fill="none" d="M0 0h12v12H0z"/><path fill="hsl(0, 0%, 60%)" d="M10 3L6 9 2 3z"/></g></svg>');
+  --collapsed-triangle-icon-url: url('data:image/svg+xml;utf8,<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path fill="none" d="M0 0h12v12H0z"/><path fill="hsl(0, 0%, 60%)" d="M3 2l6 4-6 4z"/></g></svg>');
+  --expanded-triangle-icon-url: url('data:image/svg+xml;utf8,<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path fill="none" d="M0 0h12v12H0z"/><path fill="hsl(0, 0%, 60%)" d="M10 3L6 9 2 3z"/></g></svg>');
+  --toggle-arrow-icon-url: url('data:image/svg+xml;utf8,<svg fill="hsl(0, 0%, 62%)" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/><path d="M0-.25h24v24H0z" fill="none"/></svg>');
 }
 
 .lh-vars.lh-devtools {
@@ -204,7 +206,7 @@ summary {
 
 .lh-audit--informative .lh-score__value,
 .lh-audit--manual .lh-score__value {
-  display: none;
+  visibility: hidden;
 }
 
 /* No icon for audits with number scores. */
@@ -254,22 +256,36 @@ summary {
   line-height: var(--body-line-height);
 }
 
+.lh-audit__header > div,
+.lh-audit__header > span {
+  margin: 0 5px;
+}
+
+.lh-audit__header .lh-audit__index {
+  margin-left: var(--text-indent);
+  width: var(--lh-audit-index-width);
+}
+
 .lh-audit__title {
   flex: 1;
 }
 
-.lh-toggle-arrow {
-  background: var(--collapsed-icon-url) no-repeat center center / 12px 12px;
-  background-color: transparent;
+.lh-audit__displayValue {
+  color: hsl(216, 5%, 39%);
+}
+
+.lh-audit__header .lh-toggle-arrow {
+  background: var(--toggle-arrow-icon-url) no-repeat center center / 20px 20px;
   width: 12px;
   height: 12px;
   flex: none;
   transition: transform 150ms ease-in-out;
   cursor: pointer;
   border: none;
-  order: -1;
+  transform: rotateZ(90deg);
   margin-right: calc(var(--expandable-indent) - 12px);
   align-self: flex-start;
+  margin-top: calc((var(--body-line-height) - 12px) / 2);
 }
 
 .lh-toggle-arrow-unexpandable {
@@ -291,16 +307,12 @@ summary {
 
 .lh-audit-group[open] > .lh-audit-group__summary > .lh-toggle-arrow,
 .lh-expandable-details[open] > .lh-expandable-details__summary > .lh-toggle-arrow {
-  background-image: var(--expanded-icon-url);
+  transform: rotateZ(-90deg);
 }
 
 .lh-audit-group__summary::-webkit-details-marker,
 .lh-expandable-details__summary::-webkit-details-marker {
   display: none;
-}
-
-.lh-audit__header .lh-toggle-arrow {
-  margin-top: calc((var(--body-line-height) - 12px) / 2);
 }
 
 /* Perf Timeline */
@@ -589,7 +601,7 @@ summary {
 }
 
 .lh-audit .lh-debug {
-  margin-left: var(--expandable-indent);
+  margin-left: calc(var(--expandable-indent) + var(--lh-audit-index-width));
   margin-right: var(--lh-audit-score-width);
 }
 

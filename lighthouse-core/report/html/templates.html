@@ -29,10 +29,12 @@
 <!-- Lighthouse audit -->
 <template id="tmpl-lh-audit">
   <div class="lh-audit">
-    <div class="lh-score__value"></div>
-    <details class="lh-audit__header lh-expandable-details">
-      <summary class="lh-expandable-details__summary">
+    <details class="lh-expandable-details">
+      <summary class="lh-audit__header lh-expandable-details__summary">
+        <span class="lh-audit__index"></span>
         <span class="lh-audit__title"></span>
+        <span class="lh-audit__displayValue"></span>
+        <div class="lh-score__value"></div>
         <div class="lh-toggle-arrow" title="See audits"></div>
       </summary>
       <div class="lh-audit__description"></div>
