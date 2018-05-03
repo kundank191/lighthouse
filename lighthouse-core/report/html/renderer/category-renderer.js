@@ -321,7 +321,8 @@ class CategoryRenderer {
 
       if (groups.notApplicable.length) {
         const auditGroupElem = this.renderAuditGroup(group, {expandable: true});
-        groups.notApplicable.forEach((item, i) => auditGroupElem.appendChild(this.renderAudit(item, i)));
+        groups.notApplicable.forEach((item, i) =>
+            auditGroupElem.appendChild(this.renderAudit(item, i)));
         notApplicableElements.push(auditGroupElem);
       }
     });
