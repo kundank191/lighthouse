@@ -185,7 +185,7 @@ summary {
 
 /* Score */
 
-.lh-score__value {
+.lh-audit__score-icon {
   float: right;
   margin-left: var(--lh-score-margin);
   width: calc(var(--lh-audit-score-width) - var(--lh-score-margin));
@@ -195,61 +195,27 @@ summary {
   text-align: right;
 }
 
-.lh-score__value::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  border-radius: inherit;
-  width: 16px;
+.lh-audit--informative .lh-audit__score-icon,
+.lh-audit--manual .lh-audit__score-icon {
+  visibility: hidden; /* do we need this? */
 }
 
-.lh-audit--informative .lh-score__value,
-.lh-audit--manual .lh-score__value {
-  visibility: hidden;
-}
 
-/* No icon for audits with number scores. */
-.lh-score__value:not(.lh-score__value--binary)::after {
-  content: none;
-}
-
-.lh-score__value--pass {
+.lh-audit__score-icon--pass {
   color: var(--pass-color);
-}
-
-.lh-score__value--pass::after {
   background: var(--pass-icon-url) no-repeat center center / 12px 12px;
 }
 
-.lh-score__value--average {
+.lh-audit__score-icon--average {
   color: var(--average-color);
+  background: var(--average-icon-url) no-repeat center center / 12px 12px;
 }
 
-.lh-score__value--average::after {
-  background: none;
-  content: '!';
-  color: var(--average-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 500;
-  font-size: 15px;
-}
-
-.lh-score__value--fail {
+.lh-audit__score-icon--fail {
   color: var(--fail-color);
-}
-
-.lh-score__value--fail::after {
   background: var(--fail-icon-url) no-repeat center center / 12px 12px;
 }
 
-/* This must override the above styles */
-.lh-audit .lh-score__value--binary {
-  color: transparent;
-}
 
 .lh-audit__description, .lh-category-header__description  {
   font-size: var(--body-font-size);
@@ -271,21 +237,19 @@ summary {
   flex: 1;
 }
 
-.lh-audit__displayValue {
+.lh-audit__display-text {
   color: hsl(216, 5%, 39%);
 }
 
 .lh-audit__header .lh-toggle-arrow {
   background: var(--toggle-arrow-icon-url) no-repeat center center / 20px 20px;
   width: 12px;
-  height: 12px;
   flex: none;
   transition: transform 150ms ease-in-out;
   cursor: pointer;
   border: none;
   transform: rotateZ(90deg);
   margin-right: calc(var(--expandable-indent) - 12px);
-  align-self: flex-start;
   margin-top: calc((var(--body-line-height) - 12px) / 2);
 }
 
@@ -300,10 +264,12 @@ summary {
 }
 
 .lh-expandable-details__summary {
-  display: flex;
-  align-items: center;
   cursor: pointer;
   margin-left: calc(0px - var(--expandable-indent));
+}
+
+.lh-audit__header {
+  display: flex;
 }
 
 .lh-audit-group[open] > .lh-audit-group__summary > .lh-toggle-arrow,
@@ -606,7 +572,7 @@ summary {
   margin-right: var(--lh-audit-score-width);
 }
 
-.lh-audit--error .lh-score__value {
+.lh-audit--error .lh-audit__score-icon {
   color: var(--fail-color);
   font-weight: normal;
 }
@@ -790,7 +756,6 @@ summary {
   margin-bottom: var(--lh-section-vpadding);
 }
 
-.lh-category-header .lh-score__value,
 .lh-category-header .lh-score__gauge .lh-gauge__label {
   display: none;
 }

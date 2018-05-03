@@ -35,7 +35,7 @@ class CategoryRenderer {
     const scoreDisplayMode = audit.result.scoreDisplayMode;
 
     if (audit.result.displayValue) {
-      this.dom.find('.lh-audit__displayValue', auditEl).textContent = Util.formatDisplayValue(audit.result.displayValue);
+      this.dom.find('.lh-audit__display-text', auditEl).textContent = Util.formatDisplayValue(audit.result.displayValue);
     }
 
     this.dom.find('.lh-audit__title', auditEl).appendChild(
@@ -62,7 +62,7 @@ class CategoryRenderer {
 
     if (audit.result.error) {
       auditEl.classList.add(`lh-audit--error`);
-      const valueEl = this.dom.find('.lh-score__value', auditEl);
+      const valueEl = this.dom.find('.lh-audit__score-icon', auditEl);
       valueEl.textContent = 'Error!';
       valueEl.classList.add('tooltip-boundary');
       const tooltip = this.dom.createChildOf(valueEl, 'div', 'lh-error-tooltip-content tooltip');
@@ -75,21 +75,19 @@ class CategoryRenderer {
   }
 
   /**
-   * @param {!DocumentFragment|!Element} element DOM node to populate with values.
+   * @param {!Element} element DOM node to populate with values.
    * @param {number} score
    * @param {string} scoreDisplayMode
    * @param {boolean} isError
    * @return {!Element}
    */
   _populateScore(element, score, scoreDisplayMode, isError) {
-    const scoreOutOf100 = Math.round(score * 100);
-    const valueEl = this.dom.find('.lh-score__value', element);
-    valueEl.textContent = Util.formatNumber(scoreOutOf100);
+    const valueEl = this.dom.find('.lh-audit__score-icon', element);
     // FIXME(paulirish): this'll have to deal with null scores and scoreDisplayMode stuff..
     const rating = isError ? 'error' : Util.calculateRating(score);
-    valueEl.classList.add(`lh-score__value--${rating}`, `lh-score__value--${scoreDisplayMode}`);
+    valueEl.classList.add(`lh-audit__score-icon--${rating}`, `lh-audit__score-icon--${scoreDisplayMode}`);
 
-    return /** @type {!Element} **/ (element);
+    return element;
   }
 
   /**
@@ -108,7 +106,7 @@ class CategoryRenderer {
     this.dom.find('.lh-category-header__description', tmpl)
       .appendChild(this.dom.convertMarkdownLinkSnippets(category.description));
 
-    return this._populateScore(tmpl, category.score, 'numeric', false);
+    return tmpl.firstElementChild;
   }
 
   /**

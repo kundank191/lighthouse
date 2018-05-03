@@ -56,13 +56,13 @@ describe('CategoryRenderer', () => {
 
     const title = auditDOM.querySelector('.lh-audit__title');
     const description = auditDOM.querySelector('.lh-audit__description');
-    const score = auditDOM.querySelector('.lh-score__value');
+    const score = auditDOM.querySelector('.lh-audit__score-icon');
 
     assert.equal(title.textContent, audit.result.description);
     assert.ok(description.querySelector('a'), 'audit help text contains coverted markdown links');
     assert.equal(score.textContent, '0');
-    assert.ok(score.classList.contains('lh-score__value--fail'));
-    assert.ok(score.classList.contains(`lh-score__value--${audit.result.scoreDisplayMode}`));
+    assert.ok(score.classList.contains('lh-audit__score-icon--fail'));
+    assert.ok(score.classList.contains(`lh-audit__score-icon--${audit.result.scoreDisplayMode}`));
   });
 
   it('renders an audit debug str when appropriate', () => {
@@ -93,11 +93,11 @@ describe('CategoryRenderer', () => {
     const categoryDOM = renderer.render(category, sampleResults.reportGroups);
 
     const categoryEl = categoryDOM.querySelector('.lh-category-header');
-    const value = categoryDOM.querySelector('.lh-score__value');
+    const value = categoryDOM.querySelector('.lh-audit__score-icon');
     const title = categoryEl.querySelector('.lh-category-header__title');
 
     assert.deepEqual(categoryEl, categoryEl.firstElementChild, 'first child is a score');
-    assert.ok(value.classList.contains('lh-score__value--numeric'),
+    assert.ok(value.classList.contains('lh-audit__score-icon--numeric'),
               'category score is numeric');
     const scoreInDom = Number(value.textContent);
     assert.ok(Number.isInteger(scoreInDom) && scoreInDom > 10, 'category score is rounded');
@@ -173,12 +173,12 @@ describe('CategoryRenderer', () => {
       assert.equal(gauge.textContent.trim(), '35', 'score is 0-100');
 
       const score = categoryDOM.querySelector('.lh-category-header');
-      const value = categoryDOM.querySelector('.lh-score__value');
+      const value = categoryDOM.querySelector('.lh-audit__score-icon');
       const title = score.querySelector('.lh-category-header__title');
       const description = score.querySelector('.lh-category-header__description');
 
       assert.deepEqual(score, score.firstElementChild, 'first child is a score');
-      assert.ok(value.classList.contains('lh-score__value--numeric'),
+      assert.ok(value.classList.contains('lh-audit__score-icon--numeric'),
                 'category score is numeric');
       const scoreInDom = Number(value.textContent);
       assert.ok(Number.isInteger(scoreInDom) && scoreInDom > 10, 'score is rounded out of 100');
