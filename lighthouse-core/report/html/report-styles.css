@@ -212,6 +212,10 @@ summary {
   background-image: var(--fail-icon-url);
 }
 
+.lh-audit--informative .lh-audit__display-text {
+  color: hsl(216, 5%, 39%);
+}
+
 .lh-audit--informative .lh-audit__score-icon,
 .lh-audit--manual .lh-audit__score-icon {
   visibility: hidden;
@@ -240,10 +244,6 @@ summary {
 
 .lh-audit__title {
   flex: 1;
-}
-
-.lh-audit__display-text {
-  color: hsl(216, 5%, 39%);
 }
 
 .lh-audit__header .lh-toggle-arrow {

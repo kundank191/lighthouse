@@ -171,7 +171,13 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
 
     // Diagnostics
     const diagnosticAudits = category.audits
-        .filter(audit => audit.group === 'diagnostics' && audit.result.score < 1);
+        .filter(audit => audit.group === 'diagnostics' && audit.result.score < 1)
+        .sort((a, b) => {
+          const scoreA = a.result.informative ? 100 : a.result.score;
+          const scoreB = b.result.informative ? 100 : b.result.score;
+          return scoreA - scoreB;
+        });
+
     if (diagnosticAudits.length) {
       const groupEl = this.renderAuditGroup(groups['diagnostics'], {expandable: false});
       diagnosticAudits.forEach((item, i) => groupEl.appendChild(this.renderAudit(item, i)));
