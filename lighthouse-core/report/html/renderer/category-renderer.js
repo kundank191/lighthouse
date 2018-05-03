@@ -58,14 +58,14 @@ class CategoryRenderer {
       auditEl.classList.add('lh-audit--manual');
     }
 
-    this._populateScore(auditEl, audit.result.score, scoreDisplayMode, audit.result.error);
+    this._setRatingClass(auditEl, audit.result.score, scoreDisplayMode, audit.result.error);
 
     if (audit.result.error) {
       auditEl.classList.add(`lh-audit--error`);
-      const valueEl = this.dom.find('.lh-audit__score-icon', auditEl);
-      valueEl.textContent = 'Error!';
-      valueEl.classList.add('tooltip-boundary');
-      const tooltip = this.dom.createChildOf(valueEl, 'div', 'lh-error-tooltip-content tooltip');
+      const textEl = this.dom.find('.lh-audit__display-text', auditEl);
+      textEl.textContent = 'Error!';
+      textEl.classList.add('tooltip-boundary');
+      const tooltip = this.dom.createChildOf(textEl, 'div', 'lh-error-tooltip-content tooltip');
       tooltip.textContent = audit.result.debugString || 'Report error: no audit information';
     } else if (audit.result.debugString) {
       const debugStrEl = auditEl.appendChild(this.dom.createElement('div', 'lh-debug'));
@@ -81,12 +81,11 @@ class CategoryRenderer {
    * @param {boolean} isError
    * @return {!Element}
    */
-  _populateScore(element, score, scoreDisplayMode, isError) {
-    const valueEl = this.dom.find('.lh-audit__score-icon', element);
+  _setRatingClass(element, score, scoreDisplayMode, isError) {
     // FIXME(paulirish): this'll have to deal with null scores and scoreDisplayMode stuff..
     const rating = isError ? 'error' : Util.calculateRating(score);
-    valueEl.classList.add(`lh-audit__score-icon--${rating}`, `lh-audit__score-icon--${scoreDisplayMode}`);
-
+    element.classList.add(`lh-audit--${rating}`,
+        `lh-audit--${scoreDisplayMode}`);
     return element;
   }
 

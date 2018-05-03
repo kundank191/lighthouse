@@ -50,7 +50,7 @@
   --lh-sparkline-height: 5px;
   --lh-sparkline-thin-height: 3px;
   --lh-filmstrip-thumbnail-width: 60px;
-  --lh-audit-score-width: calc(5 * var(--body-font-size));
+  --lh-score-icon-width: calc(1.5 * var(--body-font-size));
   --lh-category-score-width: calc(5 * var(--body-font-size));
   --lh-audit-vpadding: 8px;
   --lh-audit-index-width: 1.3em;
@@ -186,13 +186,9 @@ summary {
 /* Score */
 
 .lh-audit__score-icon {
-  float: right;
   margin-left: var(--lh-score-margin);
-  width: calc(var(--lh-audit-score-width) - var(--lh-score-margin));
-  position: relative;
-  font-weight: bold;
-  top: 1px;
-  text-align: right;
+  width: var(--lh-score-icon-width);
+  background: none no-repeat center center / contain;
 }
 
 .lh-audit--informative .lh-audit__score-icon,
@@ -201,23 +197,24 @@ summary {
 }
 
 
-.lh-audit__score-icon--pass {
+.lh-audit--pass .lh-audit__score-icon {
   color: var(--pass-color);
-  background: var(--pass-icon-url) no-repeat center center / 12px 12px;
+  background-image: var(--pass-icon-url);
 }
 
-.lh-audit__score-icon--average {
+.lh-audit--average .lh-audit__score-icon {
   color: var(--average-color);
-  background: var(--average-icon-url) no-repeat center center / 12px 12px;
+  background-image: var(--average-icon-url);
 }
 
-.lh-audit__score-icon--fail {
+.lh-audit--fail .lh-audit__score-icon {
   color: var(--fail-color);
-  background: var(--fail-icon-url) no-repeat center center / 12px 12px;
+  background-image: var(--fail-icon-url);
 }
 
 
 .lh-audit__description, .lh-category-header__description  {
+  margin-top: 5px;
   font-size: var(--body-font-size);
   color: var(--secondary-text-color);
   line-height: var(--body-line-height);
@@ -441,7 +438,7 @@ summary {
 
 .lh-load-opportunity__stats {
   text-align: right;
-  flex: 0 0 var(--lh-audit-score-width);
+  flex: 0 0 calc(5 * var(--body-font-size));
 }
 
 .lh-load-opportunity__primary-stat {
@@ -569,12 +566,11 @@ summary {
 
 .lh-audit .lh-debug {
   margin-left: calc(var(--expandable-indent) + var(--lh-audit-index-width));
-  margin-right: var(--lh-audit-score-width);
+  margin-right: var(--lh-score-icon-width);
 }
 
-.lh-audit--error .lh-audit__score-icon {
+.lh-audit--error .lh-audit__display-text {
   color: var(--fail-color);
-  font-weight: normal;
 }
 
 /* Audit Group */
