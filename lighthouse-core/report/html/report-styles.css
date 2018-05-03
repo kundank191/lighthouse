@@ -214,7 +214,7 @@ summary {
 
 .lh-audit--informative .lh-audit__score-icon,
 .lh-audit--manual .lh-audit__score-icon {
-  visibility: hidden; /* do we need this? */
+  visibility: hidden;
 }
 .lh-audit--error .lh-audit__score-icon {
   display: none;
