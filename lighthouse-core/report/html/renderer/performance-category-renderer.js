@@ -163,7 +163,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
       const maxWaste = Math.max(...opportunityAudits.map(audit => audit.result.rawValue));
       const scale = Math.ceil(maxWaste / 1000) * 1000;
       const groupEl = this.renderAuditGroup(groups['load-opportunities'], {expandable: false});
-      oppAudits.forEach((item, i) => groupEl.appendChild(this._renderOpportunity(item, i, scale)));
+      opportunityAudits.forEach((item, i) => groupEl.appendChild(this._renderOpportunity(item, i, scale)));
       groupEl.open = true;
       element.appendChild(groupEl);
     }
@@ -171,9 +171,9 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     // Diagnostics
     const diagnosticAudits = category.audits
         .filter(audit => audit.group === 'diagnostics' && audit.result.score < 1);
-    if (groupEl.length) {
+    if (diagnosticAudits.length) {
       const groupEl = this.renderAuditGroup(groups['diagnostics'], {expandable: false});
-      groupEl.forEach((item, i) => groupEl.appendChild(this.renderAudit(item, i)));
+      diagnosticAudits.forEach((item, i) => groupEl.appendChild(this.renderAudit(item, i)));
       groupEl.open = true;
       element.appendChild(groupEl);
     }
