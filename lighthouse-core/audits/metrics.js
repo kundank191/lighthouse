@@ -39,48 +39,104 @@ class Metrics extends Audit {
     const interactive = await artifacts.requestInteractive(metricComputationData);
     const speedIndex = await artifacts.requestSpeedIndex(metricComputationData);
     const estimatedInputLatency = await artifacts.requestEstimatedInputLatency(metricComputationData); // eslint-disable-line max-len
-    const metrics = {};
 
-    // Include the simulated/observed performance metrics
-    const metricsMap = {
-      firstContentfulPaint,
-      firstMeaningfulPaint,
-      firstCPUIdle,
-      interactive,
-      speedIndex,
-      estimatedInputLatency,
+    /** @type {UberMetricsItem} */
+    const metrics = {
+      // Include the simulated/observed performance metrics
+      firstContentfulPaint: firstContentfulPaint.timing,
+      firstContentfulPaintTs: firstContentfulPaint.timestamp,
+      firstMeaningfulPaint: firstMeaningfulPaint.timing,
+      firstMeaningfulPaintTs: firstMeaningfulPaint.timestamp,
+      firstCPUIdle: firstCPUIdle.timing,
+      firstCPUIdleTs: firstCPUIdle.timestamp,
+      interactive: interactive.timing,
+      interactiveTs: interactive.timestamp,
+      speedIndex: speedIndex.timing,
+      speedIndexTs: speedIndex.timestamp,
+      estimatedInputLatency: estimatedInputLatency.timing,
+      estimatedInputLatencyTs: estimatedInputLatency.timestamp,
+
+      // Include all timestamps of interest from trace of tab
+      observedNavigationStart: traceOfTab.timings.navigationStart,
+      observedNavigationStartTs: traceOfTab.timestamps.navigationStart,
+      observedFirstPaint: traceOfTab.timings.firstPaint,
+      observedFirstPaintTs: traceOfTab.timestamps.firstPaint,
+      observedFirstContentfulPaint: traceOfTab.timings.firstContentfulPaint,
+      observedFirstContentfulPaintTs: traceOfTab.timestamps.firstContentfulPaint,
+      observedFirstMeaningfulPaint: traceOfTab.timings.firstMeaningfulPaint,
+      observedFirstMeaningfulPaintTs: traceOfTab.timestamps.firstMeaningfulPaint,
+      observedTraceEnd: traceOfTab.timings.traceEnd,
+      observedTraceEndTs: traceOfTab.timestamps.traceEnd,
+      observedLoad: traceOfTab.timings.load,
+      observedLoadTs: traceOfTab.timestamps.load,
+      observedDomContentLoaded: traceOfTab.timings.domContentLoaded,
+      observedDomContentLoadedTs: traceOfTab.timestamps.domContentLoaded,
+
+      // Include some visual metrics from speedline
+      observedFirstVisualChange: speedline.first,
+      observedFirstVisualChangeTs: (speedline.first + speedline.beginning) * 1000,
+      observedLastVisualChange: speedline.complete,
+      observedLastVisualChangeTs: (speedline.complete + speedline.beginning) * 1000,
+      observedSpeedIndex: speedline.speedIndex,
+      observedSpeedIndexTs: (speedline.speedIndex + speedline.beginning) * 1000,
     };
 
-    for (const [metricName, values] of Object.entries(metricsMap)) {
-      metrics[metricName] = Math.round(values.timing);
-      if (values.timestamp) metrics[`${metricName}Ts`] = values.timestamp;
+    for (const [name, value] of Object.entries(metrics)) {
+      const key = /** @type {keyof UberMetricsItem} */ (name);
+      if (typeof value === 'undefined') {
+        delete metrics[key];
+      } else {
+        metrics[key] = Math.round(value);
+      }
     }
 
-    // Include all timestamps of interest from trace of tab
-    const timingsEntries = /** @type {Array<[keyof LH.Artifacts.TraceTimes, number]>} */
-      (Object.entries(traceOfTab.timings));
-    for (const [traceEventName, timing] of timingsEntries) {
-      const uppercased = traceEventName.slice(0, 1).toUpperCase() + traceEventName.slice(1);
-      const metricName = `observed${uppercased}`;
-      const timestamp = traceOfTab.timestamps[traceEventName];
-      metrics[metricName] = Math.round(timing);
-      metrics[`${metricName}Ts`] = timestamp;
-    }
-
-    // Include some visual metrics from speedline
-    metrics.observedFirstVisualChange = speedline.first;
-    metrics.observedFirstVisualChangeTs = (speedline.first + speedline.beginning) * 1000;
-    metrics.observedLastVisualChange = speedline.complete;
-    metrics.observedLastVisualChangeTs = (speedline.complete + speedline.beginning) * 1000;
-    metrics.observedSpeedIndex = Math.round(speedline.speedIndex);
-    metrics.observedSpeedIndexTs = Math.round((speedline.speedIndex + speedline.beginning) * 1000);
+    /** @type {MetricsDetails} */
+    const details = {items: [metrics]};
 
     return {
       score: 1,
       rawValue: interactive.timing,
-      details: {items: [metrics]},
+      details,
     };
   }
 }
+
+/**
+ * @typedef UberMetricsItem
+ * @property {number} firstContentfulPaint
+ * @property {number=} firstContentfulPaintTs
+ * @property {number} firstMeaningfulPaint
+ * @property {number=} firstMeaningfulPaintTs
+ * @property {number} firstCPUIdle
+ * @property {number=} firstCPUIdleTs
+ * @property {number} interactive
+ * @property {number=} interactiveTs
+ * @property {number} speedIndex
+ * @property {number=} speedIndexTs
+ * @property {number} estimatedInputLatency
+ * @property {number=} estimatedInputLatencyTs
+ * @property {number} observedNavigationStart
+ * @property {number} observedNavigationStartTs
+ * @property {number} observedFirstPaint
+ * @property {number} observedFirstPaintTs
+ * @property {number} observedFirstContentfulPaint
+ * @property {number} observedFirstContentfulPaintTs
+ * @property {number} observedFirstMeaningfulPaint
+ * @property {number} observedFirstMeaningfulPaintTs
+ * @property {number} observedTraceEnd
+ * @property {number} observedTraceEndTs
+ * @property {number} observedLoad
+ * @property {number} observedLoadTs
+ * @property {number} observedDomContentLoaded
+ * @property {number} observedDomContentLoadedTs
+ * @property {number} observedFirstVisualChange
+ * @property {number} observedFirstVisualChangeTs
+ * @property {number} observedLastVisualChange
+ * @property {number} observedLastVisualChangeTs
+ * @property {number} observedSpeedIndex
+ * @property {number} observedSpeedIndexTs
+ */
+
+/** @typedef {{items: [UberMetricsItem]}} MetricsDetails */
 
 module.exports = Metrics;
