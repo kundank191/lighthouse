@@ -16,12 +16,15 @@ declare global {
       scoreMedian: number;
     }
 
-    export interface ScoringModes {
+    export interface ScoreDisplayModes {
       NUMERIC: 'numeric';
       BINARY: 'binary';
+      MANUAL: 'manual';
+      INFORMATIVE: 'informative';
+      NOT_APPLICABLE: 'not-applicable';
     }
 
-    export type ScoringModeValue = Audit.ScoringModes[keyof Audit.ScoringModes];
+    export type ScoringModeValue = Audit.ScoreDisplayModes[keyof Audit.ScoreDisplayModes];
 
     export interface Meta {
       name: string;
@@ -29,8 +32,6 @@ declare global {
       helpText: string;
       requiredArtifacts: Array<keyof Artifacts>;
       failureDescription?: string;
-      informative?: boolean;
-      manual?: boolean;
       scoreDisplayMode?: Audit.ScoringModeValue;
     }
 
@@ -114,12 +115,9 @@ declare global {
       scoreDisplayMode: ScoringModeValue;
       description: string;
       extendedInfo?: {[p: string]: any};
-      notApplicable?: boolean;
       error?: boolean;
       name: string;
       helpText?: string;
-      informative?: boolean;
-      manual?: boolean;
       // TODO(bckenny): define details
       details?: object;
     }

@@ -48,10 +48,10 @@ class CategoryRenderer {
       header.appendChild(this.detailsRenderer.render(audit.result.details));
     }
 
-    if (audit.result.informative) {
+    if (audit.result.scoreDisplayMode === 'informative') {
       auditEl.classList.add('lh-audit--informative');
     }
-    if (audit.result.manual) {
+    if (audit.result.scoreDisplayMode === 'manual') {
       auditEl.classList.add('lh-audit--manual');
     }
 
@@ -253,7 +253,7 @@ class CategoryRenderer {
     this.createPermalinkSpan(element, category.id);
     element.appendChild(this.renderCategoryScore(category));
 
-    const manualAudits = category.audits.filter(audit => audit.result.manual);
+    const manualAudits = category.audits.filter(item => item.result.scoreDisplayMode === 'manual');
     const nonManualAudits = category.audits.filter(audit => !manualAudits.includes(audit));
 
     const auditsGroupedByGroup = /** @type {!Object<string,
@@ -278,7 +278,7 @@ class CategoryRenderer {
         group = auditsUngrouped;
       }
 
-      if (audit.result.notApplicable) {
+      if (audit.result.scoreDisplayMode === 'not-applicable') {
         group.notApplicable.push(audit);
       } else if (audit.result.score === 1 && !audit.result.debugString) {
         group.passed.push(audit);

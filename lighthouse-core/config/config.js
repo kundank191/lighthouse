@@ -94,8 +94,7 @@ function assertValidAudit(auditDefinition, auditPath) {
 
   // If it'll have a ✔ or ✖ displayed alongside the result, it should have failureDescription
   if (typeof auditDefinition.meta.failureDescription !== 'string' &&
-    auditDefinition.meta.informative !== true &&
-    auditDefinition.meta.scoreDisplayMode !== Audit.SCORING_MODES.NUMERIC) {
+    auditDefinition.meta.scoreDisplayMode === Audit.SCORING_MODES.BINARY) {
     throw new Error(`${auditName} has no failureDescription and should.`);
   }
 
