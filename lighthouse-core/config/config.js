@@ -63,8 +63,13 @@ function validateCategories(categories, audits, groups) {
       }
 
       const auditImpl = audit.implementation;
-      if (categoryId === 'accessibility' && !auditRef.group && !auditImpl.meta.manual) {
+      const isManual = auditImpl.meta.scoreDisplayMode === 'manual';
+      if (categoryId === 'accessibility' && !auditRef.group && !isManual) {
         throw new Error(`${auditRef.id} accessibility audit does not have a group`);
+      }
+
+      if (auditRef.weight > 0 && isManual) {
+        throw new Error(`${auditRef.id} is manual but has a positive weight`);
       }
 
       if (auditRef.group && !groups[auditRef.group]) {
