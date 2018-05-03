@@ -39,7 +39,7 @@ class Metrics extends Audit {
     const interactive = await artifacts.requestInteractive(metricComputationData);
     const speedIndex = await artifacts.requestSpeedIndex(metricComputationData);
     const estimatedInputLatency = await artifacts.requestEstimatedInputLatency(metricComputationData); // eslint-disable-line max-len
-    const metrics = [];
+    const metrics = {};
 
     // Include the simulated/observed performance metrics
     const metricsMap = {
@@ -52,11 +52,8 @@ class Metrics extends Audit {
     };
 
     for (const [metricName, values] of Object.entries(metricsMap)) {
-      metrics.push({
-        metricName,
-        timing: Math.round(values.timing),
-        timestamp: values.timestamp,
-      });
+      metrics[metricName] = Math.round(values.timing);
+      if (values.timestamp) metrics[`${metricName}Ts`] = values.timestamp;
     }
 
     // Include all timestamps of interest from trace of tab
@@ -66,37 +63,22 @@ class Metrics extends Audit {
       const uppercased = traceEventName.slice(0, 1).toUpperCase() + traceEventName.slice(1);
       const metricName = `observed${uppercased}`;
       const timestamp = traceOfTab.timestamps[traceEventName];
-      metrics.push({metricName, timing, timestamp});
+      metrics[metricName] = Math.round(timing);
+      metrics[`${metricName}Ts`] = timestamp;
     }
 
     // Include some visual metrics from speedline
-    metrics.push({
-      metricName: 'observedFirstVisualChange',
-      timing: speedline.first,
-      timestamp: (speedline.first + speedline.beginning) * 1000,
-    });
-    metrics.push({
-      metricName: 'observedLastVisualChange',
-      timing: speedline.complete,
-      timestamp: (speedline.complete + speedline.beginning) * 1000,
-    });
-    metrics.push({
-      metricName: 'observedSpeedIndex',
-      timing: speedline.speedIndex,
-      timestamp: (speedline.speedIndex + speedline.beginning) * 1000,
-    });
-
-    const headings = [
-      {key: 'metricName', itemType: 'text', text: 'Name'},
-      {key: 'timing', itemType: 'ms', granularity: 10, text: 'Value (ms)'},
-    ];
-
-    const tableDetails = Audit.makeTableDetails(headings, metrics);
+    metrics.observedFirstVisualChange = speedline.first;
+    metrics.observedFirstVisualChangeTs = (speedline.first + speedline.beginning) * 1000;
+    metrics.observedLastVisualChange = speedline.complete;
+    metrics.observedLastVisualChangeTs = (speedline.complete + speedline.beginning) * 1000;
+    metrics.observedSpeedIndex = Math.round(speedline.speedIndex);
+    metrics.observedSpeedIndexTs = Math.round((speedline.speedIndex + speedline.beginning) * 1000);
 
     return {
       score: 1,
       rawValue: interactive.timing,
-      details: tableDetails,
+      details: {items: [metrics]},
     };
   }
 }
