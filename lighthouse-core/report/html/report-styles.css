@@ -191,25 +191,33 @@ summary {
   background: none no-repeat center center / contain;
 }
 
+.lh-audit--pass .lh-audit__display-text {
+  color: var(--pass-color);
+}
+.lh-audit--pass .lh-audit__score-icon {
+  background-image: var(--pass-icon-url);
+}
+
+.lh-audit--average .lh-audit__display-text {
+  color: var(--average-color);
+}
+.lh-audit--average .lh-audit__score-icon {
+  background-image: var(--average-icon-url);
+}
+
+.lh-audit--fail .lh-audit__display-text {
+  color: var(--fail-color);
+}
+.lh-audit--fail .lh-audit__score-icon {
+  background-image: var(--fail-icon-url);
+}
+
 .lh-audit--informative .lh-audit__score-icon,
 .lh-audit--manual .lh-audit__score-icon {
   visibility: hidden; /* do we need this? */
 }
-
-
-.lh-audit--pass .lh-audit__score-icon {
-  color: var(--pass-color);
-  background-image: var(--pass-icon-url);
-}
-
-.lh-audit--average .lh-audit__score-icon {
-  color: var(--average-color);
-  background-image: var(--average-icon-url);
-}
-
-.lh-audit--fail .lh-audit__score-icon {
-  color: var(--fail-color);
-  background-image: var(--fail-icon-url);
+.lh-audit--error .lh-audit__score-icon {
+  display: none;
 }
 
 
