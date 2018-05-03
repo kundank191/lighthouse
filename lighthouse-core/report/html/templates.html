@@ -19,7 +19,6 @@
 <!-- Lighthouse category header -->
 <template id="tmpl-lh-category-header">
   <div class="lh-category-header">
-    <div class="lh-score__value"></div>
     <div class="lh-score__gauge"></div>
     <span class="lh-category-header__title"></span>
     <div class="lh-category-header__description"></div>
@@ -33,8 +32,8 @@
       <summary class="lh-audit__header lh-expandable-details__summary">
         <span class="lh-audit__index"></span>
         <span class="lh-audit__title"></span>
-        <span class="lh-audit__displayValue"></span>
-        <div class="lh-score__value"></div>
+        <span class="lh-audit__display-text"></span>
+        <div class="lh-audit__score-icon"></div>
         <div class="lh-toggle-arrow" title="See audits"></div>
       </summary>
       <div class="lh-audit__description"></div>
@@ -83,13 +82,13 @@
     .leftnav-item__score::after {
       content: '';
     }
-    .leftnav-item__score.lh-score__value--pass {
+    .leftnav-item__score.lh-audit__score-icon--pass {
       color: var(--pass-color);
     }
-    .leftnav-item__score.lh-score__value--average {
+    .leftnav-item__score.lh-audit__score-icon--average {
       color: var(--average-color);
     }
-    .leftnav-item__score.lh-score__value--fail {
+    .leftnav-item__score.lh-audit__score-icon--fail {
       color: var(--fail-color);
     }
     .leftnav__header {
