@@ -121,7 +121,7 @@ module.exports = [
               {wastedPercent: '<60'},
               {wastedPercent: '<60'},
               {wastedPercent: '<60'},
-            ]
+            ],
           },
         },
       },
