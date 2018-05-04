@@ -470,7 +470,7 @@
 
 .lh-load-opportunity__wasted-stat {
   text-align: right;
-  flex: 0 0 calc(5 * var(--body-font-size));
+  flex: 0 0 calc(3 * var(--body-font-size));
   font-size: var(--body-font-size);
   line-height: var(--body-line-height);
 }

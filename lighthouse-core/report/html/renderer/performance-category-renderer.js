@@ -74,7 +74,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     this.dom.find('.lh-load-opportunity__sparkline', tmpl).title = displayValue;
     this.dom.find('.lh-load-opportunity__wasted-stat', tmpl).title = displayValue;
     this.dom.find('.lh-sparkline__bar', tmpl).style.width = summaryInfo.wastedMs / scale * 100 + '%';
-    this.dom.find('.lh-load-opportunity__wasted-stat', tmpl).textContent = Util.formatMilliseconds(summaryInfo.wastedMs);
+    this.dom.find('.lh-load-opportunity__wasted-stat', tmpl).textContent = Util.formatSeconds(summaryInfo.wastedMs);
     this.dom.find('.lh-load-opportunity__description', tmpl).appendChild(this.dom.convertMarkdownLinkSnippets(audit.result.helpText));
 
     // If there's no `type`, then we only used details for `summary`
