@@ -56,20 +56,34 @@
 <template id="tmpl-lh-opportunity">
   <details class="lh-load-opportunity lh-expandable-details">
     <summary class="lh-load-opportunity__summary lh-expandable-details__summary">
-      <div class="lh-load-opportunity__title"></div>
-      <div class="lh-toggle-arrow" title="See resources"></div>
-      <div class="lh-load-opportunity__sparkline">
-        <div class="lh-sparkline"><div class="lh-sparkline__bar"></div></div>
+      <div class="lh-load-opportunity__col lh-load-opportunity__col--one">
+        <span class="lh-audit__index"></span>
+        <div class="lh-load-opportunity__title"></div>
       </div>
-      <div class="lh-load-opportunity__stats">
-        <div class="lh-load-opportunity__primary-stat"></div>
-        <div class="lh-load-opportunity__secondary-stat"></div>
+      <div class="lh-load-opportunity__col lh-load-opportunity__col--two">
+        <div class="lh-load-opportunity__sparkline">
+          <div class="lh-sparkline"><div class="lh-sparkline__bar"></div></div>
+        </div>
+        <div class="lh-load-opportunity__wasted-stat"></div>
+        <div class="lh-toggle-arrow" title="See resources"></div>
       </div>
     </summary>
     <div class="lh-load-opportunity__description"></div>
   </details>
 </template>
 
+
+<!-- Lighthouse perf opportunity header -->
+<template id="tmpl-lh-opportunity-header">
+  <div class="lh-load-opportunity__header">
+    <div class="lh-load-opportunity__col lh-load-opportunity__col--one">
+      Resource to optimize
+    </div>
+    <div class="lh-load-opportunity__col lh-load-opportunity__col--two">
+      Estimated Savings
+    </div>
+  </div>
+</template>
 
 <!-- Lighthouse left nav -->
 <template id="tmpl-lh-leftnav">

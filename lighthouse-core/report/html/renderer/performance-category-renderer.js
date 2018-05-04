@@ -55,6 +55,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
     const summary = this.dom.find('.lh-load-opportunity__summary', tmpl);
     const titleEl = this.dom.find('.lh-load-opportunity__title', tmpl);
     titleEl.textContent = audit.result.description;
+    this.dom.find('.lh-audit__index', element).textContent = `${index + 1}`;
 
     if (audit.result.error) {
       const debugStrEl = this.dom.createChildOf(summary, 'div', 'lh-debug');
@@ -71,15 +72,9 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
 
     const displayValue = Util.formatDisplayValue(audit.result.displayValue);
     this.dom.find('.lh-load-opportunity__sparkline', tmpl).title = displayValue;
-    this.dom.find('.lh-load-opportunity__stats', tmpl).title = displayValue;
+    this.dom.find('.lh-load-opportunity__wasted-stat', tmpl).title = displayValue;
     this.dom.find('.lh-sparkline__bar', tmpl).style.width = summaryInfo.wastedMs / scale * 100 + '%';
-
-    this.dom.find('.lh-load-opportunity__primary-stat', tmpl).textContent = Util.formatMilliseconds(summaryInfo.wastedMs);
-
-    if (summaryInfo.wastedBytes) {
-      this.dom.find('.lh-load-opportunity__secondary-stat', tmpl).textContent = Util.formatBytesToKB(summaryInfo.wastedBytes);
-    }
-
+    this.dom.find('.lh-load-opportunity__wasted-stat', tmpl).textContent = Util.formatMilliseconds(summaryInfo.wastedMs);
     this.dom.find('.lh-load-opportunity__description', tmpl).appendChild(this.dom.convertMarkdownLinkSnippets(audit.result.helpText));
 
     // If there's no `type`, then we only used details for `summary`
@@ -139,6 +134,9 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
       const maxWaste = Math.max(...opportunityAudits.map(audit => audit.result.rawValue));
       const scale = Math.ceil(maxWaste / 1000) * 1000;
       const groupEl = this.renderAuditGroup(groups['load-opportunities'], {expandable: false});
+      const tmpl = this.dom.cloneTemplate('#tmpl-lh-opportunity-header', this.templateContext);
+      const headerEl = this.dom.find('.lh-load-opportunity__header', tmpl);
+      groupEl.appendChild(headerEl);
       opportunityAudits.forEach((item, i) =>
           groupEl.appendChild(this._renderOpportunity(item, i, scale)));
       groupEl.open = true;

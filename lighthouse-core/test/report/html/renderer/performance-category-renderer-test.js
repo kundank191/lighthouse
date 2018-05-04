@@ -92,7 +92,7 @@ describe('PerfCategoryRenderer', () => {
     const oppSparklineElement = oppElement.querySelector('.lh-load-opportunity__sparkline');
     assert.ok(oppElement.querySelector('.lh-load-opportunity__title'), 'did not render title');
     assert.ok(oppSparklineElement, 'did not render sparkline');
-    assert.ok(oppElement.querySelector('.lh-load-opportunity__stats'), 'did not render stats');
+    assert.ok(oppElement.querySelector('.lh-load-opportunity__wasted-stat'), 'did not render stats');
     assert.ok(oppSparklineElement.title, 'did not render tooltip');
   });
 
