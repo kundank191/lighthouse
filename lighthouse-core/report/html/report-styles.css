@@ -118,11 +118,12 @@
   display: none !important;
 }
 
-a {
+.lh-audit-group a,
+.lh-category-header__description a {
   color: #0c50c7;
 }
 
-summary {
+.lh-root details summary {
   cursor: pointer;
 }
 

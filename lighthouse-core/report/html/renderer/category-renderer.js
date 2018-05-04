@@ -206,7 +206,8 @@ class CategoryRenderer {
    */
   _renderManualAudits(manualAudits, manualDescription) {
     const group = {title: 'Additional items to manually check', description: manualDescription};
-    const auditGroupElem = this.renderAuditGroup(group, {expandable: true, itemCount: manualAudits.length});
+    const auditGroupElem = this.renderAuditGroup(group,
+        {expandable: true, itemCount: manualAudits.length});
     auditGroupElem.classList.add('lh-audit-group--manual');
     manualAudits.forEach((audit, i) => {
       auditGroupElem.appendChild(this.renderAudit(audit, i));
