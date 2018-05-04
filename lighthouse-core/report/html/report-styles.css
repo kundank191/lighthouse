@@ -35,6 +35,7 @@
   --report-border-color: #ccc;
   --report-secondary-border-color: #ebebeb;
   --metric-timeline-rule-color: #b3b3b3;
+  --display-value-gray: hsl(216, 5%, 39%);
   --report-width: calc(60 * var(--body-font-size));
   --report-menu-width: calc(20 * var(--body-font-size));
   --report-content-width: calc(var(--report-width) + var(--report-menu-width));
@@ -213,7 +214,7 @@ summary {
 }
 
 .lh-audit--informative .lh-audit__display-text {
-  color: hsl(216, 5%, 39%);
+  color: var(--display-value-gray);
 }
 
 .lh-audit--informative .lh-audit__score-icon,
@@ -246,7 +247,7 @@ summary {
   flex: 1;
 }
 
-.lh-audit__header .lh-toggle-arrow {
+.lh-toggle-arrow {
   background: var(--toggle-arrow-icon-url) no-repeat center center / 20px 20px;
   width: 12px;
   flex: none;
@@ -592,13 +593,19 @@ summary {
 .lh-audit-group__header {
   font-size: var(--subheader-font-size);
   line-height: var(--subheader-line-height);
+  flex: 1;
 }
 
 .lh-audit-group__summary {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
   margin-bottom: var(--lh-audit-group-vpadding);
   margin-left: calc(0px - var(--expandable-indent));
+}
+
+.lh-audit-group__itemcount {
+  color: var(--display-value-gray);
+  margin: 0 10px;
 }
 
 .lh-audit-group__summary .lh-toggle-arrow {
