@@ -43,7 +43,6 @@
 
 <!-- Lighthouse perf metric -->
 <template id="tmpl-lh-metric">
-
   <div class="lh-metric">
     <div class="lh-metric__innerwrap tooltip-boundary">
       <span class="lh-metric__title"></span>
@@ -51,8 +50,26 @@
       <div class="lh-metric__description tooltip"></div>
     </div>
   </div>
-
 </template>
+
+<!-- Lighthouse perf opportunity -->
+<template id="tmpl-lh-opportunity">
+  <details class="lh-load-opportunity lh-expandable-details">
+    <summary class="lh-load-opportunity__summary lh-expandable-details__summary">
+      <div class="lh-load-opportunity__title"></div>
+      <div class="lh-toggle-arrow" title="See resources"></div>
+      <div class="lh-load-opportunity__sparkline">
+        <div class="lh-sparkline"><div class="lh-sparkline__bar"></div></div>
+      </div>
+      <div class="lh-load-opportunity__stats">
+        <div class="lh-load-opportunity__primary-stat"></div>
+        <div class="lh-load-opportunity__secondary-stat"></div>
+      </div>
+    </summary>
+    <div class="lh-load-opportunity__description"></div>
+  </details>
+</template>
+
 
 <!-- Lighthouse left nav -->
 <template id="tmpl-lh-leftnav">
