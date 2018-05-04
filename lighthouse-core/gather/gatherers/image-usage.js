@@ -15,7 +15,7 @@ const Driver = require('../driver.js'); // eslint-disable-line no-unused-vars
 
 /* global window, getElementsInDocument, Image */
 
-/** @typedef {MakeOptional<LH.Artifacts.SingleImageUsage, 'networkRecord'>} ImageSizeInfo */
+/** @typedef {Omit<LH.Artifacts.SingleImageUsage, 'networkRecord'>} ImageSizeInfo */
 
 /** @return {Array<ImageSizeInfo>} */
 /* istanbul ignore next */
@@ -145,7 +145,7 @@ class ImageUsage extends Gatherer {
    * @param {LH.Gatherer.LoadData} loadData
    * @return {Promise<LH.Artifacts['ImageUsage']>}
    */
-  afterPass(passContext, loadData) {
+  async afterPass(passContext, loadData) {
     const driver = passContext.driver;
     const indexedNetworkRecords = loadData.networkRecords.reduce((map, record) => {
       if (/^image/.test(record._mimeType) && record.finished) {
@@ -167,27 +167,24 @@ class ImageUsage extends Gatherer {
       return (${collectImageElementInfo.toString()})();
     })()`;
 
-    /** @type {Promise<Array<ImageSizeInfo>>} */
-    const evaluatePromise = driver.evaluateAsync(expression);
-    return evaluatePromise.then(elements => {
-      return elements.reduce((promise, element) => {
-        return promise.then(collector => {
-          // Images within `picture` behave strangely and natural size information isn't accurate,
-          // CSS images have no natural size information at all.
-          // Try to get the actual size if we can.
-          const elementPromise = (element.isPicture || element.isCss) && element.networkRecord ?
-              this.fetchElementWithSizeInformation(driver, element) :
-              Promise.resolve(element);
+    /** @type {Array<ImageSizeInfo>} */
+    const elements = await driver.evaluateAsync(expression);
 
-          return elementPromise.then(element => {
-            // link up the image with its network record
-            element.networkRecord = indexedNetworkRecords[element.src];
-            collector.push(/** @type {LH.Artifacts.SingleImageUsage} */ (element));
-            return collector;
-          });
-        });
-      }, Promise.resolve(/** @type {LH.Artifacts['ImageUsage']} */ ([])));
-    });
+    /** @type {LH.Artifacts['ImageUsage']} */
+    const imageUsage = [];
+    for (let element of elements) {
+      // Images within `picture` behave strangely and natural size information isn't accurate,
+      // CSS images have no natural size information at all.
+      // Try to get the actual size if we can.
+      if (element.isPicture || element.isCss) {
+        element = await this.fetchElementWithSizeInformation(driver, element);
+      }
+
+      // link up the image with its network record
+      imageUsage.push(Object.assign({networkRecord: indexedNetworkRecords[element.src]}, element));
+    }
+
+    return imageUsage;
   }
 }
 

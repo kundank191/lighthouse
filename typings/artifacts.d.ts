@@ -228,7 +228,9 @@ declare global {
           endTime: number;
           responseReceivedTime: number;
           mimeType: string;
-        }
+        };
+        width?: number;
+        height?: number;
       }
 
       export interface OptimizedImage {
